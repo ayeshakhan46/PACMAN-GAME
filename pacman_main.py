@@ -1,7 +1,10 @@
+from typing import List, Union
+
 import pygame
 import os, sys
 import math
 
+from pygame import Surface, SurfaceType
 
 #create display of pacman game
 boards = [
@@ -48,19 +51,19 @@ timer = pygame.time.Clock()
 fps=60
 levels = boards
 colour= 'blue'
+player_img=[]
 PI = math.pi
+player_images = []
+for i in range(1, 5):
+    player_images.append(pygame.transform.scale(pygame.image.load(f'Assets/player_images/{i}.png'), (45, 45)))
+player_X= 450
+player_Y= 663
+direction =0
+counter=0
 # ttf_path = os.path.join(sys.path[0], "freesanbold.ttf")
 # pygame.font.Font(ttf_path, 20)
 # font= pygame.font.Font('',20)
-run =True
-while run:
-    timer.tick(fps)
-    screen.fill('black')
-    for event in pygame.event.get():
-        if event.type== pygame.QUIT:
-            run=False
-    pygame.display.flip()
-pygame.quit()
+
 
 
 def draw_board():
@@ -94,3 +97,32 @@ def draw_board():
             if levels[i][j] == 9:
                 pygame.draw.line(screen, 'white', (j * num2, i * num1 + (0.5 * num1)),
                                  (j * num2 + num2, i * num1 + (0.5 * num1)), 3)
+
+def player():
+    if direction == 0:
+        screen.blit(player_images[counter//5],(player_X,player_Y))
+    elif direction == 1:
+        screen.blit(pygame.transform.flip(player_images[counter//5],True,False),(player_X,player_Y))
+    elif direction == 2:
+        screen.blit(pygame.transform.rotate(player_images[counter//5],90),(player_X,player_Y))
+    elif direction == 3:
+        screen.blit(pygame.transform.rotate(player_images[counter // 5], 270), (player_X, player_Y))
+
+
+run =True
+while run:
+    timer.tick(fps)
+    if counter<19:
+        counter += 1
+    else:
+        counter = 0
+    screen.fill('black')
+    draw_board()
+    player()
+    for event in pygame.event.get():
+        if event.type== pygame.QUIT:
+            run=False
+
+
+    pygame.display.flip()
+pygame.quit()
