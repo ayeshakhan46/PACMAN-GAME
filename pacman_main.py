@@ -1,10 +1,10 @@
 from typing import List, Union
-
+# from pygame import font
 import pygame
 import os, sys
 import math
 
-from pygame import Surface, SurfaceType
+from pygame import Surface, SurfaceType , font
 
 # create display of pacman game
 boards = [
@@ -67,12 +67,26 @@ centerY = player_Y + 24
 turnsAllowed = [False, False, False, False]
 direction_command = 0
 player_speed = 2
+score= 0
 
 
 # ttf_path = os.path.join(sys.path[0], "freesanbold.ttf")
 # pygame.font.Font(ttf_path, 20)
 # font= pygame.font.Font('',20)
-
+def draw_mics():
+    score_text= font.render(f'score: {score}',True,'white')
+    screen.blit(score_text,(10,920))
+def check_collision(scor):
+    num1 = ((screen_height-50)//32)
+    num2 =screen_width//30
+    if 0< player_X <870:
+        if levels[centerY//num1][centerX//num2]==1:
+            levels[centerY//num1][centerX//num2]=0
+            scor+=50
+        if levels[centerY//num1][centerX//num2]==2:
+            levels[centerY//num1][centerX//num2]=0
+            scor+=50
+    return scor
 
 def draw_board():
     num1 = ((screen_height - 50) // 32)
@@ -193,10 +207,12 @@ while run:
     screen.fill('black')
     draw_board()
     player()
+    draw_mics()
     centerX = player_X + 23
     centerY = player_Y + 24
     turnsAllowed = check_position(centerX, centerY)
     player_X, player_Y = move_player(player_X, player_Y)
+    score = check_collision(score)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
