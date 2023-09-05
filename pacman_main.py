@@ -193,6 +193,8 @@ while run:
     screen.fill('black')
     draw_board()
     player()
+    centerX = player_X + 23
+    centerY = player_Y + 24
     turnsAllowed = check_position(centerX, centerY)
     player_X, player_Y = move_player(player_X, player_Y)
     for event in pygame.event.get():
@@ -207,6 +209,7 @@ while run:
                 direction_command = 2
             if event.key == pygame.K_DOWN:
                 direction_command = 3
+
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_RIGHT and direction_command == 0:
                 direction_command = direction
